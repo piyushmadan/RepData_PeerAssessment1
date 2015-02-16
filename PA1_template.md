@@ -305,3 +305,28 @@ summary( DT_daywise$V1[!DT_daywise$weekend])
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
 ##      41    7840   10300   10200   12800   21200       6
 ```
+
+###Time series for weekday and weekend 
+
+```r
+#First setting all dates as FALSE and then Saturday & Sunday as TRUE
+DT$weekend <- FALSE
+DT$weekend[weekdays(as.Date(DT_daywise$date)) %in% c("Saturday","Sunday")] <- TRUE
+DT_weekend <- DT[DT$weekend=="TRUE"]
+
+DT_Average_day_weekend <- DT_weekend[DT$steps != 0, list(AvgSteps = mean(steps, na.rm = TRUE)), by = interval]
+
+plot.ts(DT_Average_day_weekend$AvgSteps, main="Average time series with Average steps in 5 min interval(weekend)", xlab="5-min interval",ylab="count of steps",type = "l")
+```
+
+![plot of chunk unnamed-chunk-21](PA1_template_files/figure-html/unnamed-chunk-211.png) 
+
+```r
+DT_weekday <- DT[DT$weekend=="FALSE"]
+
+DT_Average_day_weekday <- DT_weekday[DT$steps != 0, list(AvgSteps = mean(steps, na.rm = TRUE)), by = interval]
+
+plot.ts(DT_Average_day_weekday$AvgSteps, main="Average time series with Average steps in 5 min interval(weekday)", xlab="5-min interval",ylab="count of steps",type = "l")
+```
+
+![plot of chunk unnamed-chunk-21](PA1_template_files/figure-html/unnamed-chunk-212.png) 
